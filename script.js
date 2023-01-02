@@ -65,29 +65,40 @@ let playerInput = "";
 
 let computerInput = "";
 
-function getPlayerInput() {
-    playerInput = prompt("Weapon of Choice, please?");
-    playerInput = playerInput.toLowerCase();
-    return playerInput;
-}
+
+window.addEventListener('click', function(e) {
+    const input = document.querySelector(`button[id=${e.target.id}]`);
+    playerInput = input.id;
+    let playerSelection = this.document.querySelector(".player-selection");
+    playerSelection.textContent = `Your choice is: ${playerInput.toUpperCase()}`;
+    return round();
+})
 
 function getComputerInput() {
     const listOfChoices = ["rock", "paper", "scissors"];
     const randomChoice = Math.floor((Math.random() * 3));
     computerInput = listOfChoices[randomChoice];
+    let computerSelection = document.querySelector(".computer-selection");
+    computerSelection.textContent = `Computer choice is: ${computerInput.toUpperCase()}`;
     return computerInput;
 }
 
 function compareSelections() {
+    let compareMessage = document.querySelector(".compare-message");
     if((playerInput === "rock" && computerInput === "scissors") || 
     (playerInput === "paper" && computerInput === "rock") || 
     (playerInput === "scissors" && computerInput === "paper")) {
+        compareMessage.textContent = `${playerInput.toUpperCase()} beats ${computerInput.toUpperCase()}. You've won this round!`;
         playerScore++;
     }
     else if((playerInput === "rock" && computerInput === "paper") || 
     (playerInput === "paper" && computerInput === "scissors") || 
     (playerInput === "scissors" && computerInput === "rock")) {
+        compareMessage.textContent = `${computerInput.toUpperCase()} beats ${playerInput.toUpperCase()}. You've lost this round!`;
         computerScore++;
+    }
+    else {
+        compareMessage.textContent = `You've both selected ${playerInput.toUpperCase()}. It's a tie.`;
     }
 }
 
@@ -97,43 +108,31 @@ function keepScore (){
     return roundScore.textContent;
 }
 
-function displayMessage() {
-    const roundMessage = document.querySelector(".round-message");
 
-    if((playerInput === "rock" && computerInput === "scissors") || 
-    (playerInput === "paper" && computerInput === "rock") || 
-    (playerInput === "scissors" && computerInput === "paper")) {
-        roundMessage.textContent = "Well done";
-        return roundMessage.textContent;
+function declareWinner() {
+    let declareMessage = document.querySelector(".declare-message");
+    if(playerScore === 5){
+        declareMessage.textContent = `${playerInput.toUpperCase()} beats ${computerInput.toUpperCase()}. You've won the game!`;
+        setTimeout(restartGame, 5000);
     }
-    else if((playerInput === "rock" && computerInput === "paper") || 
-    (playerInput === "paper" && computerInput === "scissors") || 
-    (playerInput === "scissors" && computerInput === "rock")) {
-        roundMessage.textContent = "Sorry, not this time...";
-        return roundMessage.textContent;
+    else if(computerScore === 5){
+        declareMessage.textContent = `${computerInput.toUpperCase()} beats ${playerInput.toUpperCase()}. You've lost the game!`;
+        setTimeout(restartGame, 5000);
     }
-    else {
-        roundMessage.textContent = "It's a tie";
-        return roundMessage.textContent;
-    }
+} 
+
+function restartGame(){
+    location.reload();
 }
 
 function round() {
-    getPlayerInput();
     getComputerInput();
     compareSelections();
     keepScore();
-    displayMessage();
+    declareWinner();
 }
 
-function game () {
-    let roundNumber = 0;
-    while(roundNumber < 5) {
-        round();
-        roundNumber++;
-    }
-}
-game();
+
 
 // function playRound(playerSelection, computerSelection) {
     
